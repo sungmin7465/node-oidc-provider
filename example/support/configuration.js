@@ -13,14 +13,20 @@ const selectAccount = new Prompt({
 interactions.add(selectAccount, 0);
 
 module.exports = {
+  
   clients: [
-    // {
-    //   client_id: 'oidcCLIENT',
-    //   client_secret: '...',
-    //   grant_types: ['refresh_token', 'authorization_code'],
-    //   redirect_uris: ['http://sso-client.dev/providers/7/open_id', 'http://sso-client.dev/providers/8/open_id'],
-    // }
+
+    {
+	          client_id: 'client01',
+	          grant_types: ['urn:ietf:params:oauth:grant-type:device_code', 'refresh_token'],
+	          response_types: [],
+	          redirect_uris: [],
+            token_endpoint_auth_method: 'none',
+	          //application_type: 'native',  -> native로 하면 device flow가 사용불가됨.
+    },
+
   ],
+
   interactions: {
     policy: interactions,
     url(ctx, interaction) { // eslint-disable-line no-unused-vars
@@ -40,12 +46,21 @@ module.exports = {
       'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo'],
   },
   features: {
+    registration: {
+      enabled: true,
+      initialAccessToken: false,
+    },
     devInteractions: { enabled: false }, // defaults to true
-
     deviceFlow: { enabled: true }, // defaults to false
     introspection: { enabled: true }, // defaults to false
     revocation: { enabled: true }, // defaults to false
+    userinfo : {enabled : true}
   },
+
+  formats: {
+    AccessToken: 'jwt',
+  },
+
   jwks: {
     keys: [
       {
